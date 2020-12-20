@@ -1,1 +1,3 @@
 # support
+
+This is just a repo for simple generic support functions that I might use in many programs over and over.  Like read config file form disk or marshal objects in memory into a json string, etc...

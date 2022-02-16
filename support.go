@@ -51,7 +51,7 @@ func GetOutboundIP() net.IP {
 // Unmarshals the config contents from a YAML file into memory
 func GetConfigContentsFromYaml(filename string) (Config, error) {
 	var conf Config
-	file, err := support.ReadConfigFileContents(filename)
+	file, err := ReadConfigFileContents(filename)
 	if err != nil {
 		fmt.Printf("The file was not found. err = %s\n", err)
 		return conf, err

@@ -47,20 +47,3 @@ func GetOutboundIP() net.IP {
 
 	return conn.LocalAddr().(*net.UDPAddr).IP
 }
-
-// Unmarshals the config contents from a YAML file into memory
-func GetConfigContentsFromYaml(filename string) (Config, error) {
-	var conf Config
-	file, err := ReadConfigFileContents(filename)
-	if err != nil {
-		fmt.Printf("The file was not found. err = %s\n", err)
-		return conf, err
-	}
-	err = yaml.Unmarshal(file, &conf)
-	if err != nil {
-		fmt.Printf("There was an error decoding the yaml file. err = %s\n", err)
-		return conf, err
-	}
-
-	return conf, nil
-}

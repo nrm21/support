@@ -12,7 +12,7 @@ import (
 
 const dbTimeoutTime = 5
 
-// ConnToEtcd connects to an ETCD database using TLS settings and returns the connection object
+// (private function) connToEtcd connects to an ETCD database using TLS settings and returns the connection object
 func connToEtcd(certPath *string, endpoints *[]string) *clientv3.Client {
 	tlsInfo := transport.TLSInfo{
 		CertFile:      *certPath + "\\peer.crt",

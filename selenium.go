@@ -19,26 +19,33 @@ You must run these commands in the package you are using (it will need to be don
 	go mod tidy
 */
 
-// Loops until we find an element and return it (this might need a timeout later on)
-func LoopUntilFindRowElement(we selenium.WebElement, cssselector string) selenium.WebElement {
-	elem, err := we.FindElement(selenium.ByCSSSelector, cssselector)
-	for err != nil {
-		time.Sleep(time.Millisecond * 500)
+// Loops until we find an element and return it
+func LoopUntilFindRowElement(we selenium.WebElement, cssselector string, timeout int) selenium.WebElement {
+	var elem selenium.WebElement
+	var err error
 
+	then := time.Now().Add(time.Duration(timeout) * time.Second)
+	for {
 		elem, err = we.FindElement(selenium.ByCSSSelector, cssselector)
+		if err != nil {
+			time.Sleep(500 * time.Millisecond)
+			if time.Now().After(then) {
+				log.Fatalln("Timeout finding element on page")
+			}
+		} else { // we found the element break from loop
+			break
+		}
 	}
 
 	return elem
 }
 
-// Loops until we find an element and return it (this might need a timeout later on)
+// Loops until we find an element and return it
 func LoopUntilFindElement(driver *selenium.WebDriver, cssselector string, timeout int) selenium.WebElement {
 	var elem selenium.WebElement
 	var err error
 
-	now := time.Now()
-	then := now.Add(time.Duration(timeout) * time.Second)
-
+	then := time.Now().Add(time.Duration(timeout) * time.Second)
 	for {
 		elem, err = (*driver).FindElement(selenium.ByCSSSelector, cssselector)
 		if err != nil {
@@ -54,13 +61,22 @@ func LoopUntilFindElement(driver *selenium.WebDriver, cssselector string, timeou
 	return elem
 }
 
-// Loops until we find a group of elements and return an array of them (this might need a timeout later on)
-func LoopUntilFindElements(driver *selenium.WebDriver, cssselector string) []selenium.WebElement {
-	elem, err := (*driver).FindElements(selenium.ByCSSSelector, cssselector)
-	for err != nil {
-		time.Sleep(time.Millisecond * 500)
+// Loops until we find a group of elements and return an array of them
+func LoopUntilFindElements(driver *selenium.WebDriver, cssselector string, timeout int) []selenium.WebElement {
+	var elem []selenium.WebElement
+	var err error
 
+	then := time.Now().Add(time.Duration(timeout) * time.Second)
+	for {
 		elem, err = (*driver).FindElements(selenium.ByCSSSelector, cssselector)
+		if err != nil {
+			time.Sleep(500 * time.Millisecond)
+			if time.Now().After(then) {
+				log.Fatalln("Timeout finding element on page")
+			}
+		} else { // we found the element break from loop
+			break
+		}
 	}
 
 	return elem

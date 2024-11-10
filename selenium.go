@@ -1,6 +1,7 @@
 package support
 
 import (
+	"log"
 	"time"
 
 	"github.com/tebeka/selenium"
@@ -31,12 +32,23 @@ func LoopUntilFindRowElement(we selenium.WebElement, cssselector string) seleniu
 }
 
 // Loops until we find an element and return it (this might need a timeout later on)
-func LoopUntilFindElement(driver *selenium.WebDriver, cssselector string) selenium.WebElement {
-	elem, err := (*driver).FindElement(selenium.ByCSSSelector, cssselector)
-	for err != nil {
-		time.Sleep(time.Millisecond * 500)
+func LoopUntilFindElement(driver *selenium.WebDriver, cssselector string, timeout int) selenium.WebElement {
+	var elem selenium.WebElement
+	var err error
 
+	now := time.Now()
+	then := now.Add(time.Duration(timeout) * time.Second)
+
+	for {
 		elem, err = (*driver).FindElement(selenium.ByCSSSelector, cssselector)
+		if err != nil {
+			time.Sleep(500 * time.Millisecond)
+			if time.Now().After(then) {
+				log.Fatalln("Timeout finding element on page")
+			}
+		} else { // we found the element break from loop
+			break
+		}
 	}
 
 	return elem
